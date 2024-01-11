@@ -186,6 +186,15 @@
 
 			$('#veiculo').val(placa).prop('readonly', true);
 			$('#condutor').val(cpf).prop('readonly', true);
+
+			var dataAtual = new Date();
+			var dataFormatada = dataAtual.getFullYear() + '-' + ('0' + (dataAtual.getMonth() + 1)).slice(-2) + '-' + ('0' + dataAtual.getDate()).slice(-2);
+			var horaFormatada = ('0' + dataAtual.getHours()).slice(-2) + ':' + ('0' + dataAtual.getMinutes()).slice(-2);
+
+			console.log('dataFormatada',dataFormatada)
+			console.log('horaFormatada',horaFormatada)
+			$('#dataInicial').val(dataFormatada);
+			$('#horaInicial').val(horaFormatada);
 		}
 		
 		function enviarRequisicao() {

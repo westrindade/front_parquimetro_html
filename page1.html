@@ -141,6 +141,10 @@
 		$(document).ready(function() {
 			//nickname
 			updateUserName();
+
+			$('#cidade').prop('readonly', true);
+			$('#uf').prop('readonly', true);
+
 			//validacao
 			$('#celular').inputmask('(11)99999-9999', { reverse: true });
 			$('#cpf').inputmask('999.999.999-99', { reverse: true });
