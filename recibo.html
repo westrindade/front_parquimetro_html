@@ -72,35 +72,40 @@
 			
 			$('#proximo').on('click', function() {
 				localStorage.clear();
-				window.location.href = 'page1.html';
+				window.location.href = 'index.html';
 			});		
         });
 
         function preencherRecibo() {
             var jsonRecuperado = localStorage.getItem("jsonPagamento");
-            var objeto = JSON.parse(jsonRecuperado);
-            var detailsContainer = document.getElementById("detailsContainer");
+			
+			if (jsonRecuperado) {
+			
+				var objeto = JSON.parse(jsonRecuperado);
+				var detailsContainer = document.getElementById("detailsContainer");
 
-            detailsContainer.innerHTML += `<p><strong>Id:</strong> ${objeto.id}</p>`;
-            detailsContainer.innerHTML += `<p><strong>Data:</strong> ${formatarDataHora(objeto.dataHora)}</p>`;
-            detailsContainer.innerHTML += `<p><strong>Nome:</strong> ${objeto.parquimetro.condutor.nome}</p>`;
-            detailsContainer.innerHTML += `<p><strong>Status:</strong> ${objeto.parquimetro.status}</p>`;
-            detailsContainer.innerHTML += `<p><strong>Pagamento:</strong> ${objeto.tipoPagamento}</p>`;
-            detailsContainer.innerHTML += `<p><strong>Valor Total:</strong> R$ ${objeto.parquimetro.valorTotal.toFixed(2)}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Id:</strong> ${objeto.id}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Data:</strong> ${formatarDataHora(objeto.dataHora)}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Nome:</strong> ${objeto.parquimetro.condutor.nome}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Status:</strong> ${objeto.parquimetro.status}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Pagamento:</strong> ${objeto.tipoPagamento}</p>`;
+				detailsContainer.innerHTML += `<p><strong>Valor Total:</strong> R$ ${objeto.parquimetro.valorTotal.toFixed(2)}</p>`;
 
-            for (var i = 0; i < objeto.parquimetro.periodos.length; i++) {
-                detailsContainer.innerHTML += '<hr>';
-                var periodo = objeto.parquimetro.periodos[i];
+				for (var i = 0; i < objeto.parquimetro.periodos.length; i++) {
+					detailsContainer.innerHTML += '<hr>';
+					var periodo = objeto.parquimetro.periodos[i];
 
-                var dataHoraInicialFormatada = formatarDataHora(periodo.dataHoraInicial);
-                var dataHoraFinalFormatada = formatarDataHora(periodo.dataHoraFinal);
+					var dataHoraInicialFormatada = formatarDataHora(periodo.dataHoraInicial);
+					var dataHoraFinalFormatada = formatarDataHora(periodo.dataHoraFinal);
 
-                detailsContainer.innerHTML += `<p><strong>Período ${i + 1}</strong></p>`;
-                detailsContainer.innerHTML += `<p><strong>Entrada:</strong> ${dataHoraInicialFormatada}</p>`;
-                detailsContainer.innerHTML += `<p><strong>Saída:</strong> ${dataHoraFinalFormatada}</p>`;
-                detailsContainer.innerHTML += `<p><strong>Ação do Período:</strong> ${periodo.acaoPeriodo}</p>`;
-            }
-            detailsContainer.innerHTML += '<hr>';
+					detailsContainer.innerHTML += `<p><strong>Período ${i + 1}</strong></p>`;
+					detailsContainer.innerHTML += `<p><strong>Entrada:</strong> ${dataHoraInicialFormatada}</p>`;
+					detailsContainer.innerHTML += `<p><strong>Saída:</strong> ${dataHoraFinalFormatada}</p>`;
+					detailsContainer.innerHTML += `<p><strong>Ação do Período:</strong> ${periodo.acaoPeriodo}</p>`;
+				}
+				detailsContainer.innerHTML += '<hr>';
+			
+			}
         }
 
         function formatarDataHora(arrayDataHora) {
