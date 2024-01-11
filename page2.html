@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+	<title>Cadastro em Etapas - Página 2</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Parquímetro</a>
+        <span class="user-name" id="userNameSpan"></span>&nbsp
+		<i class="bi bi-person-circle" style="font-size: 30px"></i>
+    </nav>
+
+	<div class="container mt-5">
+		<div class="step-container">
+			<div class="step">Passo 1</div>
+			<div class="step active">Passo 2</div>
+			<div class="step">Passo 3</div>
+			<div class="step">Passo 4</div>
+			<div class="step">Passo 5</div>
+		</div>
+		
+		<h2>Forma de Pagamento</h2>
+		<form id="cadastroForm">
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					<label for="metodoPagamento">Método de Pagamento:</label>
+					<select class="form-control" id="metodoPagamento" name="metodoPagamento" required>
+						<option value="credito">Crédito</option>
+						<option value="debito">Débito</option>
+						<option value="pix">PIX</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<button type="button" id="salvar" class="btn btn-success">Salvar</button>
+				</div>
+				<div class="form-group col-md-6 text-right">
+					<button type="button" id="proximo" class="btn btn-primary">Próximo</button>
+				</div>
+			</div>
+
+			<!-- Modal de Mensagem -->
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header bg-danger text-white">
+							<h5 class="modal-title">Erro</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div id="mensagem"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+	<script src="script.js"></script>
+
+	<script>
+
+	$(document).ready(function() {
+		//nickname
+		updateUserName();
+		
+		preencherCampos();
+						
+		$('#salvar').on('click', function() {
+			enviarRequisicao();
+		});
+		
+		//botao
+		$('#salvar').on('click', function() {
+			$('#cadastroForm').addClass('was-validated');
+			// Validar o formulário
+			if ($('#cadastroForm')[0].checkValidity())
+				enviarRequisicao();
+			else 
+				console.log('Formulário inválido. Corrija os campos destacados.');
+		});
+		
+		$('#proximo').hide();
+		$('#proximo').on('click', function() {
+			var metodoPagamento = $('#metodoPagamento').val();
+			localStorage.setItem('metodoPagamento', metodoPagamento.toUpperCase());
+			window.location.href = 'page3.html';
+		});
+	});
+		
+	function enviarRequisicao() {
+		var cpf = localStorage.getItem('cpf');
+		var metodoPagamento = $('#metodoPagamento').val();
+
+		var url = 'http://localhost:8080/condutores/'+cpf+'/salvarTipoPgto?tipoPagamento=' + metodoPagamento.toUpperCase();
+
+		// Envia a requisição
+		$.ajax({
+			type: "PUT",
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type':'application/json',
+				'Access-Control-Allow-Methods': 'PUT, OPTIONS',
+				'Access-Control-Allow-Headers': 'Content-Type'
+			},
+			url: url,
+			success: function(response) {
+				console.log("Requisição bem-sucedida:", response);
+				exibirMensagem("Dados gravados com Sucesso",false);
+				exibeProximoBotao();
+			},
+			error: function(error) {
+				console.error('Erro na requisição:', error);
+				exibirMensagem(error,true);
+			}
+		});
+	}
+	
+	function preencherCampos(){
+		var placa = localStorage.getItem('placa');
+		var cpf = localStorage.getItem('cpf');
+	}
+	
+</script>
+</body>
+</html>

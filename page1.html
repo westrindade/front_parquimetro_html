@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+	<title>Cadastro em Etapas - Página 1</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Parquímetro</a>
+        <span class="user-name" id="userNameSpan"></span>&nbsp
+		<i class="bi bi-person-circle" style="font-size: 30px"></i>
+    </nav>
+
+	<div class="container mt-5">
+        <div class="step-container">
+            <div class="step active">Passo 1</div>
+            <div class="step">Passo 2</div>
+            <div class="step">Passo 3</div>
+            <div class="step">Passo 4</div>
+            <div class="step">Passo 5</div>
+        </div>
+		
+		<form id="cadastroForm">
+			<h2>Informações Pessoais</h2>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					<label for="nome">Nome:</label>
+					<input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" required>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="celular">Celular:</label>
+					<input type="text" class="form-control" id="celular" name="celular" placeholder="Digite seu Celular" maxlength="14" required>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="cpf">Cpf:</label>
+					<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Digite seu cpf" maxlength="14" required>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="dataNascimento">Data Nascimento:</label>
+					<input type="date" class="form-control" id="dataNascimento" name="dataNascimento" placeholder="Digite sua Data Nascimento">
+				</div>
+			</div>
+
+			<h2>Endereço</h2>
+			<div class="form-row">
+			
+				<div class="form-group col-md-2">
+					<label for="cep">Cep:</label>
+					<input type="text" class="form-control" id="cep" name="cep" placeholder="Digite o cep" maxlength="9" required>
+				</div>
+			
+				<div class="form-group col-md-2">
+					<label for="tipoLogradouro">Tipo Logradouro:</label>
+					<input type="text" class="form-control" id="tipoLogradouro" name="tipoLogradouro" placeholder="Digite o tipoLogradouro" maxlength="10" required>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="logradouro">Logradouro:</label>
+					<input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Digite o Logradouro" required>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="nroLogradouro">Nro Logradouro:</label>
+					<input type="text" class="form-control" id="nroLogradouro" name="nroLogradouro" placeholder="Digite o Nro" maxlength="10" required>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="bairro">Bairro:</label>
+					<input type="text" class="form-control" id="bairro" name="bairro" placeholder="Digite o bairro" required>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="cidade">Cidade:</label>
+					<input type="text" class="form-control" id="cidade" name="cidade" placeholder="Digite o cidade" required>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="uf">UF:</label>
+					<input type="text" class="form-control" id="uf" name="uf" placeholder="Digite o uf" maxlength="2" required>
+				</div>
+				
+			</div>
+
+			<h2>Veiculo</h2>
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="placa">Placa:</label>
+					<input type="text" class="form-control" id="placa" name="placa" placeholder="Digite a placa" maxlength="7" required>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="modelo">Modelo:</label>
+					<input type="text" class="form-control" id="modelo" name="modelo" placeholder="Digite o modelo" required>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="cor">Cor:</label>
+					<input type="text" class="form-control" id="cor" name="cor" placeholder="Digite a cor" required>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<button type="button" id="salvar" class="btn btn-success">Salvar</button>
+				</div>
+				<div class="form-group col-md-6 text-right">
+					<button type="button" id="proximo" class="btn btn-primary">Próximo</button>
+				</div>
+			</div>
+
+			<!-- Modal de Mensagem -->
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header bg-danger text-white">
+							<h5 class="modal-title">Erro</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div id="mensagem"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+	<script src="script.js"></script>
+
+	<script>
+
+		$(document).ready(function() {
+			//nickname
+			updateUserName();
+			//validacao
+			$('#celular').inputmask('(11)99999-9999', { reverse: true });
+			$('#cpf').inputmask('999.999.999-99', { reverse: true });
+		
+			$('#cep').inputmask('99999-999', { reverse: true });
+			
+			$(document).on('input', '#placa', function() {
+				var placaUpperCase = $(this).val().toUpperCase();
+				$(this).val(placaUpperCase);
+			});
+			
+			$(document).on('input', '#tipoLogradouro', function() {
+				var placaUpperCase = $(this).val().toUpperCase();
+				$(this).val(placaUpperCase);
+			});
+			
+			//acoes em botao
+			//consultar cep
+			$('#cep').on('blur', function() {
+				obterDadosViaCep();
+			});
+		
+			//botao
+			$('#salvar').on('click', function() {
+				$('#cadastroForm').addClass('was-validated');
+				// Validar o formulário
+				if ($('#cadastroForm')[0].checkValidity())
+					enviarRequisicao();
+				else 
+					console.log('Formulário inválido. Corrija os campos destacados.');
+			});
+			
+			$('#proximo').hide();
+			$('#proximo').on('click', function() {
+				// Obtenha a placa e o CPF dos campos correspondentes
+				var placa = $('#placa').val();
+				var cpf = $('#cpf').val().replace(/\./g, '').replace(/-/g, '');
+				var nome = $('#nome').val();
+
+				// Armazene temporariamente os dados no localStorage
+				localStorage.setItem('placa', placa);
+				localStorage.setItem('cpf', cpf);
+				localStorage.setItem('nome', nome);
+
+				// Redirecione para a page2.html
+				window.location.href = 'page2.html';
+			});
+		});
+		
+		function enviarRequisicao() {
+			// Obtém os dados do formulário dinamicamente
+			var dadosFormulario = {
+				nome: $("#nome").val(),
+				celular: $("#celular").val(),
+				cpf: $("#cpf").val().replace(/\./g, '').replace(/-/g, ''),
+				dataNascimento: formatarData($("#dataNascimento").val()), // Formata a data antes de enviar
+				tipoLogradouro: $("#tipoLogradouro").val(),
+				logradouro: $("#logradouro").val(),
+				nroLogradouro: $("#nroLogradouro").val(),
+				bairro: $("#bairro").val(),
+				cidade: $("#cidade").val(),
+				uf: $("#uf").val(),
+				cep: $("#cep").val(),
+				tipoPagamentoPadrao: "PIX",
+				veiculos: [
+					{
+						placa: $("#placa").val(),
+						modelo: $("#modelo").val(),
+						cor: $("#cor").val()
+					}
+				]
+			};
+
+			var url = "http://localhost:8080/condutores";
+			// Envia a requisição POST
+			$.ajax({
+				type: "POST",
+				url: url,
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify(dadosFormulario),
+				success: function(response) {
+					console.log("Requisição bem-sucedida:", response);
+					exibirMensagem("Dados gravados com Sucesso",false);
+					exibeProximoBotao()
+				},
+				error: function(error) {
+					exibirMensagem(error,true);
+				}
+			});
+		}
+
+	</script>
+</body>
+</html>

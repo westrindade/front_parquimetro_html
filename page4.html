@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+	<title>Cadastro em Etapas - Página 4</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Parquímetro</a>
+        <span class="user-name" id="userNameSpan"></span>&nbsp
+		<i class="bi bi-person-circle" style="font-size: 30px"></i>
+    </nav>
+
+	<div class="container mt-5">
+		<div class="step-container">
+			<div class="step">Passo 1</div>
+			<div class="step">Passo 2</div>
+			<div class="step">Passo 3</div>
+			<div class="step active">Passo 4</div>
+			<div class="step">Passo 5</div>
+		</div>
+		<form action="page5.html">
+			<h2>Estacionamento Variável</h2>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<button type="button" id="salvar" class="btn btn-success">Encerrar</button>
+				</div>
+				<div class="form-group col-md-6 text-right">
+					<button type="button" id="proximo" class="btn btn-primary">Próximo</button>
+				</div>
+			</div>
+
+			<!-- Modal de Mensagem -->
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header bg-danger text-white">
+							<h5 class="modal-title">Erro</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div id="mensagem"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+	<script src="script.js"></script>
+
+	<script>
+
+		$(document).ready(function() {
+			//nickname
+			updateUserName();
+			
+			$('#proximo').hide();
+			
+			//botao
+			$('#salvar').on('click', function() {
+				enviarRequisicao();
+			});
+			
+			$('#proximo').hide();
+			$('#proximo').on('click', function() {
+				window.location.href = 'page5.html';
+			});		
+		});
+
+		function enviarRequisicao() {
+			var idParquimetro = localStorage.getItem('idParquimetro');
+			
+			// Envia a requisição
+			var url = 'http://localhost:8080/parquimetro/condutor-encerra/'+idParquimetro
+			console.log('url',url);
+			$.ajax({
+				type: "PUT",
+				url: url,
+				contentType: "application/json; charset=utf-8",
+				success: function(response) {
+					console.log("Requisição bem-sucedida:", response);
+					exibirMensagem("Dados gravados com Sucesso",false);
+					exibeProximoBotao();
+				},
+				error: function(error) {
+					console.error('Erro na requisição:', error);
+					exibirMensagem(error, true);
+				}
+			});
+		}
+		
+	</script>
+
+</body>
+</html>
