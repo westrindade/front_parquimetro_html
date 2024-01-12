@@ -57,8 +57,16 @@
 				url: 'https://viacep.com.br/ws/' + cep + '/json/',
 				dataType: 'json',
 				success: function(data) {
-					// Preenche os campos do formulário com os dados obtidos
-					$('#logradouro').val(data.logradouro);
+
+					// Separa o primeiro nome do logradouro
+					var palavras = data.logradouro.split(' ');
+					var tipoLogradouro = palavras.shift().toUpperCase();
+					var logradouro = palavras.join(' ');
+
+					$('#tipoLogradouro').val(tipoLogradouro);
+					$('#logradouro').val(logradouro);
+
+					//$('#logradouro').val(data.logradouro);
 					$('#bairro').val(data.bairro);
 					$('#cidade').val(data.localidade);
 					$('#uf').val(data.uf);

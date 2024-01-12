@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/style.css">
+	<title>Cadastro em Etapas - Página 6</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Parquímetro</a>
+        <span class="user-name" id="userNameSpan"></span>&nbsp
+		<i class="bi bi-person-circle" style="font-size: 30px"></i>
+    </nav>
+
+	<div class="container mt-5">
+		<div class="step-container">
+			<div class="step active">Passo 1</div>
+			<div class="step">Passo 2</div>
+			<div class="step">Passo 3</div>
+		</div>
+		
+		<form id="cadastroForm">
+		
+			<h2>Informações do Parquimetro</h2>
+			<div class="form-row">
+				<div class="form-group col-md-3">
+					<label for="tipoParquimetro">Tipo Parquimetro:</label>
+					<input type="text" class="form-control form-control-lg" id="tipoParquimetro" name="tipoParquimetro">
+				</div>
+				<div class="form-group col-md-3">
+					<label for="veiculo">Veiculo:</label>
+					<input type="text" class="form-control form-control-lg" id="veiculo" name="veiculo">
+				</div>
+				<div class="form-group col-md-3">
+					<label for="condutor">Condutor:</label>
+					<input type="text" class="form-control form-control-lg" id="condutor" name="condutor">
+				</div>
+				<div class="form-group col-md-3">
+					<label for="status">Status:</label>
+					<input type="text" class="form-control form-control-lg" id="status" name="status">
+				</div>
+			</div>
+		
+			<h2 id="texto_Periodo">Período</h2>
+			<div id="tabelaPeriodos"></div>
+
+			<div class="form-row">
+				<div class="form-group col-md-12 text-right">
+					<button type="button" id="proximo" class="btn btn-danger" onclick="proximaPagina()">Encerrar</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+	<script src="./js/script.js"></script>
+
+	<script>
+
+		$(document).ready(function() {
+			//nickname
+			updateUserName();
+			
+			preencherCampos();
+						
+			//botao
+			$('#proximo').on('click', function() {
+				//window.location.href = 'page4.html';
+				var tipoParquimetro = $('#tipoParquimetro').val()
+				//if (tipoParquimetro === "FIXO") {
+				//	window.location.href = 'page5.html';
+				//} else {
+					window.location.href = 'page4.html';
+				//}
+			});
+		
+		});
+		
+		function preencherCampos(){
+			var placa = localStorage.getItem('placa');
+			var cpf = localStorage.getItem('cpf');
+
+			$('#veiculo').val(placa).prop('readonly', true);
+			$('#condutor').val(cpf).prop('readonly', true);
+			$('#status').prop('readonly', true);
+			$('#tipoParquimetro').prop('readonly', true);
+
+			enviarRequisicao();
+		}
+		
+		function enviarRequisicao() {
+			console.log('entrei')
+			var cpf = localStorage.getItem('cpf');
+			
+			var url = 'http://localhost:8080/parquimetro/condutor/'+cpf+'/status/ABERTO';
+			// Envia a requisição
+			$.ajax({
+				type: "GET",
+				url: url,
+				contentType: "application/json; charset=utf-8",
+				//data: JSON.stringify(dadosFormulario),
+				success: function(response) {
+					console.log("Requisição bem-sucedida:", response[0]);
+					var result = response ? response[0] : null
+					//exibirMensagem("Dados gravados com Sucesso",false);
+					//exibeProximoBotao();
+					
+					if (result) {
+						localStorage.setItem('idParquimetro', result.id);
+						//localStorage.setItem('tipoParquimetro', response.tipoParquimetro);
+						$('#tipoParquimetro').val(result.tipoParquimetro);
+						preencherTabelaECampos(result);
+					}
+				},
+				error: function(error) {
+					console.error('Erro na requisição:', error);
+					exibirMensagem(error, true);
+				}
+			});
+		}
+		
+		function preencherTabelaECampos(lista) {
+			lista ? $('#status').val(lista.status) : null
+
+			var periodos = lista.periodo ? lista.periodo : null
+			if (periodos){
+				var tabela = $('<table class="table table-bordered mt-3"></table>');
+				var cabecalho = $('<thead class="thead-light"><tr><th scope="col">#</th><th>Data Hora Inicial</th><th>Data Hora Final</th></tr></thead>');
+				tabela.append(cabecalho);
+
+				var corpo = $('<tbody></tbody>');
+
+				// Iterar sobre os períodos e criar as linhas da tabela
+				for (var i = 0; i < periodos.length; i++) {
+					var periodo = periodos[i];
+					var linha = $('<tr><td>'+i+1+'</td><td>' + periodo.dataHoraInicial + '</td><td>' + periodo.dataHoraFinal + '</td></tr>');
+					corpo.append(linha);
+				}
+
+				tabela.append(corpo);
+
+				// Adicionar a tabela ao documento
+				$('#tabelaPeriodos').html(tabela);
+			}
+		}
+
+		function proximaPagina(){
+			var tipoParquimetro = localStorage.getItem('tipoParquimetro');
+			if (tipoParquimetro === 'FIXO')
+				window.location.href = 'page5.html';
+			else 
+				window.location.href = 'page4.html';
+		}
+
+	</script>
+
+</body>
+</html>

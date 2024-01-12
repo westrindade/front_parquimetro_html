@@ -21,8 +21,6 @@
             <div class="step active">Passo 1</div>
             <div class="step">Passo 2</div>
             <div class="step">Passo 3</div>
-            <div class="step">Passo 4</div>
-            <div class="step">Passo 5</div>
         </div>
 		
 		<form id="cadastroForm">
@@ -139,6 +137,18 @@
 	<script>
 
 		$(document).ready(function() {
+
+            const placa = localStorage.getItem('placa1');
+			const cpf = localStorage.getItem('cpf1');
+			const nome = localStorage.getItem('nome1');
+			localStorage.clear();
+			if (cpf){
+                localStorage.setItem('cpf', cpf);
+                localStorage.setItem('placa', placa);
+				localStorage.setItem('nome', nome);
+				window.location.href = 'page3.html';
+			}
+
 			//nickname
 			updateUserName();
 
@@ -146,7 +156,7 @@
 			$('#uf').prop('readonly', true);
 
 			//validacao
-			$('#celular').inputmask('(11)99999-9999', { reverse: true });
+			$('#celular').inputmask('(99)99999-9999', { reverse: true });
 			$('#cpf').inputmask('999.999.999-99', { reverse: true });
 		
 			$('#cep').inputmask('99999-999', { reverse: true });

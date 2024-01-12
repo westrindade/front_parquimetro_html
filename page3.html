@@ -21,8 +21,6 @@
 			<div class="step">Passo 1</div>
 			<div class="step">Passo 2</div>
 			<div class="step active">Passo 3</div>
-			<div class="step">Passo 4</div>
-			<div class="step">Passo 5</div>
 		</div>
 		
 		<form id="cadastroForm">
@@ -141,11 +139,12 @@
 			$('#proximo').hide();
 			$('#proximo').on('click', function() {
 				var tipoParquimetro = $('#tipoParquimetro').val();
-				if (tipoParquimetro === "fixo") {
-					window.location.href = 'page5.html';
-				} else {
-					window.location.href = 'page4.html';
-				}
+				window.location.href = 'index.html';
+				// if (tipoParquimetro === "fixo") {
+				// 	window.location.href = 'page5.html';
+				// } else {
+				// 	window.location.href = 'page4.html';
+				// }
 			});
 					
 			$("#tipoParquimetro").change(function(){
@@ -191,8 +190,6 @@
 			var dataFormatada = dataAtual.getFullYear() + '-' + ('0' + (dataAtual.getMonth() + 1)).slice(-2) + '-' + ('0' + dataAtual.getDate()).slice(-2);
 			var horaFormatada = ('0' + dataAtual.getHours()).slice(-2) + ':' + ('0' + dataAtual.getMinutes()).slice(-2);
 
-			console.log('dataFormatada',dataFormatada)
-			console.log('horaFormatada',horaFormatada)
 			$('#dataInicial').val(dataFormatada);
 			$('#horaInicial').val(horaFormatada);
 		}
@@ -204,12 +201,12 @@
 			var url = ''
 			var dadosFormulario = {}
 			
-			console.log('tipoParquimetro',tipoParquimetro);
 			if (tipoParquimetro == 'fixo') {
 				url = 'http://localhost:8080/parquimetro/fixo';
 			
-				var dataHoraInicial = $('#dataInicial').val() + 'T' + $('#horaInicial').val() +':00';
-				var dataHoraFinal = $('#dataFinal').val() + 'T' + $('#horaFinal').val()+':00';
+				console.log('formatarData-$(dataInicial).val()',formatarData($('#dataInicial').val()))
+				var dataHoraInicial = formatarData($('#dataInicial').val()) + ' ' + $('#horaInicial').val() +':00';
+				var dataHoraFinal = formatarData($('#dataFinal').val()) + ' ' + $('#horaFinal').val()+':00';
 			
 				dadosFormulario = {
 					veiculo: $("#veiculo").val(),

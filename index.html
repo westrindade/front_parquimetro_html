@@ -49,7 +49,10 @@
 
     <div class="container">
         <h1>Bem-vindo</h1>
-        <button class="btn btn-primary rounded-btn" onclick="iniciar()">Iniciar</button>
+        <div class="d-flex flex-column align-items-center">
+            <button id="iniciar" class="btn btn-primary rounded-btn mb-2" onclick="iniciar()">Iniciar</button>
+            <button id="encerrar" class="btn btn-danger rounded-btn" onclick="encerrar()">Encerrar</button>
+        </div>
     </div>
 
     <footer>
@@ -60,8 +63,23 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
+        var cpf = localStorage.getItem('cpf');
+
+        if (cpf) {
+            document.getElementById('iniciar').style.display = 'none';
+            document.getElementById('encerrar').style.display = 'block';
+        } else {
+            // Caso contrário, exibe o botão 'Iniciar' e oculta o botão 'Encerrar'
+            document.getElementById('iniciar').style.display = 'block';
+            document.getElementById('encerrar').style.display = 'none';
+        }
+
         function iniciar() {
             window.location.href = 'page1.html';
+        }
+
+        function encerrar() {
+            window.location.href = 'page6.html';
         }
     </script>
 
