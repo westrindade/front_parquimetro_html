@@ -6,24 +6,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./css/style.css">
-	<title>Cadastro em Etapas - Página 2</title>
+	<title>Cadastro de Tipo de Pagamento</title>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="#">Parquímetro</a>
+        <a class="navbar-brand" href="index.html">Parquímetro</a>
         <span class="user-name" id="userNameSpan"></span>&nbsp
 		<i class="bi bi-person-circle" style="font-size: 30px"></i>
     </nav>
 
 	<div class="container mt-5">
-		<div class="step-container">
+		<!-- <div class="step-container">
 			<div class="step">Passo 1</div>
 			<div class="step active">Passo 2</div>
-			<div class="step">Passo 3</div>
-		</div>
+		</div> -->
 		
-		<h2>Forma de Pagamento</h2>
+		<h5>Forma de Pagamento</h5>
+		<p>Escolha a forma de pagamento mais confortável, que será utilizada para todos os parquímetros.</p>
 		<form id="cadastroForm">
 			<div class="form-row">
 				<div class="form-group col-md-12">
@@ -46,11 +46,11 @@
 			</div>
 
 			<!-- Modal de Mensagem -->
-			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog" aria-labelledby="modalMensagemLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header bg-danger text-white">
-							<h5 class="modal-title">Erro</h5>
+							<h5 class="modal-title" id="modalMensagemLabel">Erro</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -64,6 +64,7 @@
 					</div>
 				</div>
 			</div>
+			
 		</form>
 	</div>
 
@@ -97,9 +98,13 @@
 		
 		$('#proximo').hide();
 		$('#proximo').on('click', function() {
+			var nextPage = localStorage.getItem('nexPage');
+			localStorage.removeItem('nexPage');
+
+			var page = nextPage ? nextPage : 'listaVeiculos.html'
 			var metodoPagamento = $('#metodoPagamento').val();
 			localStorage.setItem('metodoPagamento', metodoPagamento.toUpperCase());
-			window.location.href = 'page3.html';
+			window.location.href = page;//'listaVeiculos.html';
 		});
 	});
 		

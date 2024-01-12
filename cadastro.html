@@ -4,27 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="./css/style.css">
-	<title>Cadastro em Etapas - Página 1</title>
+	<title>Cadastro de Condutor</title>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="#">Parquímetro</a>
+        <a class="navbar-brand" href="index.html">Parquímetro</a>
         <span class="user-name" id="userNameSpan"></span>&nbsp
 		<i class="bi bi-person-circle" style="font-size: 30px"></i>
     </nav>
 
 	<div class="container mt-5">
-        <div class="step-container">
+        <!-- <div class="step-container">
             <div class="step active">Passo 1</div>
             <div class="step">Passo 2</div>
-            <div class="step">Passo 3</div>
-        </div>
+        </div> -->
 		
 		<form id="cadastroForm">
-			<h2>Informações Pessoais</h2>
+			<h2>Cadastro Condutor</h2>
+			<hr>
+			<h5>Dados Pessoais</h5>
 			<div class="form-row">
 				<div class="form-group col-md-12">
 					<label for="nome">Nome:</label>
@@ -43,8 +44,8 @@
 					<input type="date" class="form-control" id="dataNascimento" name="dataNascimento" placeholder="Digite sua Data Nascimento">
 				</div>
 			</div>
-
-			<h2>Endereço</h2>
+			<hr>
+			<h5>Endereço</h5>
 			<div class="form-row">
 			
 				<div class="form-group col-md-2">
@@ -79,10 +80,10 @@
 				</div>
 				
 			</div>
-
-			<h2>Veiculo</h2>
+			<hr>
+			<h5>Veiculo</h5>
 			<div class="form-row">
-				<div class="form-group col-md-4">
+				<!-- <div class="form-group col-md-4">
 					<label for="placa">Placa:</label>
 					<input type="text" class="form-control" id="placa" name="placa" placeholder="Digite a placa" maxlength="7" required>
 				</div>
@@ -93,9 +94,40 @@
 				<div class="form-group col-md-4">
 					<label for="cor">Cor:</label>
 					<input type="text" class="form-control" id="cor" name="cor" placeholder="Digite a cor" required>
-				</div>
+				</div> -->
+				<table class="table table-bordered table-sm" id="tabela-dinamica">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Placa</th>
+							<th>Modelo</th>
+							<th>Cor</th>
+							<th>Ação</th>
+						</tr>
+					</thead>
+					<tbody><!-- As Linhas serão adicionadas dinamicamente -->
+						<tr>
+							<td>1</td>
+							<td contenteditable="true"></td>
+							<td contenteditable="true"></td>
+							<td contenteditable="true"></td>
+							<td>
+								<button class="btn btn-danger btn-sm" onclick="excluirLinhaAtual(this)">
+									<i class="fas fa-trash"></i> Excluir
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-success btn-sm" onclick="adicionarLinha()">
+					<i class="fas fa-plus"></i>Adicionar
+				</button>
+				&nbsp;
+				<button class="btn btn-primary" onclick="gerarJSON()">
+					<i class="fas fa-file-alt btn-sm"></i> Gerar JSON
+				</button>
 			</div>
-
+			<br>
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<button type="button" id="salvar" class="btn btn-success">Salvar</button>
@@ -106,11 +138,11 @@
 			</div>
 
 			<!-- Modal de Mensagem -->
-			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog" aria-labelledby="modalMensagemLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header bg-danger text-white">
-							<h5 class="modal-title">Erro</h5>
+							<h5 class="modal-title" id="modalMensagemLabel">Erro</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -124,6 +156,7 @@
 					</div>
 				</div>
 			</div>
+			
 
 		</form>
 	</div>
@@ -137,17 +170,7 @@
 	<script>
 
 		$(document).ready(function() {
-
-            const placa = localStorage.getItem('placa1');
-			const cpf = localStorage.getItem('cpf1');
-			const nome = localStorage.getItem('nome1');
-			localStorage.clear();
-			if (cpf){
-                localStorage.setItem('cpf', cpf);
-                localStorage.setItem('placa', placa);
-				localStorage.setItem('nome', nome);
-				window.location.href = 'page3.html';
-			}
+			// window.location.href = 'formaPgto.html';
 
 			//nickname
 			updateUserName();
@@ -190,17 +213,16 @@
 			$('#proximo').hide();
 			$('#proximo').on('click', function() {
 				// Obtenha a placa e o CPF dos campos correspondentes
-				var placa = $('#placa').val();
+				// var placa = $('#placa').val();
 				var cpf = $('#cpf').val().replace(/\./g, '').replace(/-/g, '');
 				var nome = $('#nome').val();
 
 				// Armazene temporariamente os dados no localStorage
-				localStorage.setItem('placa', placa);
+				// localStorage.setItem('placa', placa);
 				localStorage.setItem('cpf', cpf);
 				localStorage.setItem('nome', nome);
 
-				// Redirecione para a page2.html
-				window.location.href = 'page2.html';
+				window.location.href = 'formaPgto.html';
 			});
 		});
 		
@@ -219,13 +241,14 @@
 				uf: $("#uf").val(),
 				cep: $("#cep").val(),
 				tipoPagamentoPadrao: "PIX",
-				veiculos: [
-					{
-						placa: $("#placa").val(),
-						modelo: $("#modelo").val(),
-						cor: $("#cor").val()
-					}
-				]
+				veiculos: gerarJsonVeiculo()
+				// veiculos: [
+				// 	{
+				// 		placa: $("#placa").val(),
+				// 		modelo: $("#modelo").val(),
+				// 		cor: $("#cor").val()
+				// 	}
+				// ]
 			};
 
 			var url = "http://localhost:8080/condutores";
@@ -244,6 +267,43 @@
 					exibirMensagem(error,true);
 				}
 			});
+		}
+
+		var proximoID = 2; // Inicializa com 2 porque a primeira linha já tem o ID 1.
+
+		function adicionarLinha() {
+			var newRow = `<tr>
+							<td>${proximoID}</td>
+							<td contenteditable="true"></td>
+							<td contenteditable="true"></td>
+							<td contenteditable="true"></td>
+							<td>
+								<button type="button" class="btn btn-danger" onclick="excluirLinhaAtual(this)">
+									<i class="fas fa-trash"></i> Excluir
+								</button>
+							</td>
+						</tr>`;
+			$('#tabela-dinamica tbody').append(newRow);
+			proximoID++;
+		}
+
+		function excluirLinhaAtual(button) {
+			$(button).closest('tr').remove();
+		}
+
+		function gerarJsonVeiculo() {
+			var dados = [];
+			$('#tabela-dinamica tbody tr').each(function(index, row) {
+				var id = $(row).find('td:eq(0)').text();
+				var placa = $(row).find('td:eq(1)').text().toUpperCase();
+				var modelo = $(row).find('td:eq(2)').text().toUpperCase();
+				var cor = $(row).find('td:eq(3)').text().toUpperCase();
+				if (placa)
+					dados.push({ "placa": placa, "modelo": modelo, "cor": cor });
+			});
+
+			console.log(JSON.stringify(dados));
+			return dados;
 		}
 
 	</script>

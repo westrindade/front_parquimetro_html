@@ -72,12 +72,11 @@
 			
 			$('#proximo').on('click', function() {
                 const cpf = localStorage.getItem('cpf');
-                const placa = localStorage.getItem('placa');
+                // const placa = localStorage.getItem('placa');
                 const nome = localStorage.getItem('nome');
                 localStorage.clear();
-                localStorage.setItem('cpf1', cpf);
-                localStorage.setItem('placa1', placa);
-                localStorage.setItem('nome1', nome);
+                localStorage.setItem('cpf', cpf);
+                localStorage.setItem('nome', nome);
 
 				window.location.href = 'index.html';
 			});		

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/style.css">
+	<title>Cadastro em Etapas - Página 6</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="index.html">Parquímetro</a>
+        <span class="user-name" id="userNameSpan"></span>&nbsp
+		<i class="bi bi-person-circle" style="font-size: 30px"></i>
+    </nav>
+
+	<div class="container mt-5">
+		<!-- <div class="step-container">
+			<div class="step active">Passo 1</div>
+			<div class="step">Passo 2</div>
+		</div> -->
+		
+		<form id="cadastroForm">
+			<h5 id="texto_Periodo">Veículos</h5>
+			<p>Lista de veículos registrados para este condutor:</p>
+			<div id="tabelaPeriodos"></div>
+
+			<!-- <div class="form-row">
+				<div class="form-group col-md-12 text-right">
+					<button type="button" id="proximo" class="btn btn-danger" onclick="proximaPagina()">Encerrar</button>
+				</div>
+			</div> -->
+
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+	<script src="./js/script.js"></script>
+
+	<script>
+
+		$(document).ready(function() {
+			//nickname
+			updateUserName();
+			
+			preencherCampos();		
+		});
+		
+		function preencherCampos(){
+			enviarRequisicao();
+		}
+		
+		function enviarRequisicao() {
+			var cpf = localStorage.getItem('cpf')
+			
+			var url = 'http://localhost:8080/veiculos/'+cpf;
+			// Envia a requisição
+			$.ajax({
+				type: "GET",
+				url: url,
+				contentType: "application/json; charset=utf-8",
+				//data: JSON.stringify(dadosFormulario),
+				success: function(response) {
+					console.log("Requisição bem-sucedida:", response);
+					//exibirMensagem("Dados gravados com Sucesso",false);
+					//exibeProximoBotao();
+					
+					if (response) {
+						//localStorage.setItem('placa', result.id);
+						//localStorage.setItem('tipoParquimetro', response.tipoParquimetro);
+						preencherLista(response);
+					}
+				},
+				error: function(error) {
+					console.error('Erro na requisição:', error);
+					exibirMensagem(error, true);
+				}
+			});
+		}
+		
+		function preencherLista(lista) {
+			var veiculos = lista ? lista : null
+			if (veiculos){
+				var tabela = $('<table class="table table-bordered mt-3"></table>');
+				var cabecalho = $('<thead class="thead-light"><tr><th scope="col">#</th><th>Placa</th><th>Modelo</th><th>Cor</th></tr></thead>');
+				tabela.append(cabecalho);
+
+				var corpo = $('<tbody></tbody>');			
+				for (var i = 0; i < veiculos.length; i++) {
+					var linha = i+1;
+					var veiculo = veiculos[i];
+					var linha = $('<tr><td>'+linha+'</td><td><a href="#" onclick="redirecionarParaOutraPagina(\'' + veiculo.placa + '\')">' + 
+						veiculo.placa + '</a></td><td>' + veiculo.modelo + '</td><td>' + veiculo.cor + '</td></tr>');
+					corpo.append(linha);
+				}
+
+				tabela.append(corpo);
+
+				// Adicionar a tabela ao documento
+				$('#tabelaPeriodos').html(tabela);
+			}
+		}
+
+		function redirecionarParaOutraPagina(placa) {
+			// Armazenar a placa no localStorage
+			localStorage.setItem('placa', placa);
+
+			// Redirecionar para a outra página
+			window.location.href = 'parquimetro.html';
+		}
+
+	</script>
+
+</body>
+</html>

@@ -11,21 +11,21 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="#">Parquímetro</a>
+        <a class="navbar-brand" href="index.html">Parquímetro</a>
         <span class="user-name" id="userNameSpan"></span>&nbsp
 		<i class="bi bi-person-circle" style="font-size: 30px"></i>
     </nav>
 
 	<div class="container mt-5">
-		<div class="step-container">
+		<!-- <div class="step-container">
 			<div class="step active">Passo 1</div>
 			<div class="step">Passo 2</div>
 			<div class="step">Passo 3</div>
-		</div>
+		</div> -->
 		
 		<form id="cadastroForm">
 		
-			<h2>Informações do Parquimetro</h2>
+			<h5>Parquimetro Aberto</h5>
 			<div class="form-row">
 				<div class="form-group col-md-3">
 					<label for="tipoParquimetro">Tipo Parquimetro:</label>
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 		
-			<h2 id="texto_Periodo">Período</h2>
+			<h5 id="texto_Periodo">Período</h5>
 			<div id="tabelaPeriodos"></div>
 
 			<div class="form-row">
@@ -68,27 +68,21 @@
 		$(document).ready(function() {
 			//nickname
 			updateUserName();
-			
 			preencherCampos();
 						
 			//botao
 			$('#proximo').on('click', function() {
-				//window.location.href = 'page4.html';
 				var tipoParquimetro = $('#tipoParquimetro').val()
-				//if (tipoParquimetro === "FIXO") {
-				//	window.location.href = 'page5.html';
-				//} else {
-					window.location.href = 'page4.html';
-				//}
+				window.location.href = 'encerrarParquimetro.html';
 			});
 		
 		});
 		
 		function preencherCampos(){
-			var placa = localStorage.getItem('placa');
+			//var placa = localStorage.getItem('placa');
 			var cpf = localStorage.getItem('cpf');
 
-			$('#veiculo').val(placa).prop('readonly', true);
+			//$('#veiculo').val(placa).prop('readonly', true);
 			$('#condutor').val(cpf).prop('readonly', true);
 			$('#status').prop('readonly', true);
 			$('#tipoParquimetro').prop('readonly', true);
@@ -97,7 +91,6 @@
 		}
 		
 		function enviarRequisicao() {
-			console.log('entrei')
 			var cpf = localStorage.getItem('cpf');
 			
 			var url = 'http://localhost:8080/parquimetro/condutor/'+cpf+'/status/ABERTO';
@@ -129,7 +122,7 @@
 		
 		function preencherTabelaECampos(lista) {
 			lista ? $('#status').val(lista.status) : null
-
+			$('#veiculo').val(lista.veiculo).prop('readonly', true);
 			var periodos = lista.periodo ? lista.periodo : null
 			if (periodos){
 				var tabela = $('<table class="table table-bordered mt-3"></table>');
@@ -140,8 +133,9 @@
 
 				// Iterar sobre os períodos e criar as linhas da tabela
 				for (var i = 0; i < periodos.length; i++) {
+					var linha = i+1;
 					var periodo = periodos[i];
-					var linha = $('<tr><td>'+i+1+'</td><td>' + periodo.dataHoraInicial + '</td><td>' + periodo.dataHoraFinal + '</td></tr>');
+					var linha = $('<tr><td>'+linha+'</td><td>' + periodo.dataHoraInicial + '</td><td>' + periodo.dataHoraFinal + '</td></tr>');
 					corpo.append(linha);
 				}
 
@@ -155,9 +149,9 @@
 		function proximaPagina(){
 			var tipoParquimetro = localStorage.getItem('tipoParquimetro');
 			if (tipoParquimetro === 'FIXO')
-				window.location.href = 'page5.html';
+				window.location.href = 'realizarPagamento.html';
 			else 
-				window.location.href = 'page4.html';
+				window.location.href = 'encerrarParquimetro.html';
 		}
 
 	</script>

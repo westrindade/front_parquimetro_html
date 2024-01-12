@@ -6,26 +6,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./css/style.css">
-	<title>Cadastro em Etapas - Página 3</title>
+	<title>Iniciar Parquimetro</title>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="#">Parquímetro</a>
+        <a class="navbar-brand" href="index.html">Parquímetro</a>
         <span class="user-name" id="userNameSpan"></span>&nbsp
 		<i class="bi bi-person-circle" style="font-size: 30px"></i>
     </nav>
 
 	<div class="container mt-5">
-		<div class="step-container">
+		<!-- <div class="step-container">
 			<div class="step">Passo 1</div>
-			<div class="step">Passo 2</div>
-			<div class="step active">Passo 3</div>
-		</div>
+			<div class="step active">Passo 2</div>
+		</div> -->
 		
 		<form id="cadastroForm">
 		
-			<h2>Informações do Veículo/Condutor</h2>
+			<h2>Iniciar Parquímetro</h2>
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="veiculo">Veiculo:</label>
@@ -37,7 +36,7 @@
 				</div>
 			</div>
 		
-			<h2>Parquimetro</h2>
+			<h5>Parquimetro</h5>
 			<div class="form-row">
 				<div class="form-group col-md-12">
 					<label for="tipoParquimetro">Tipo Parquimetro:</label>
@@ -59,8 +58,8 @@
 					<input type="text" class="form-control" id="latitude" name="latitude" placeholder="Digite a latitude">
 				</div>
 			</div>
-
-			<h2 id="texto_Periodo">Período</h2>
+			<hr>
+			<h5 id="texto_Periodo">Período</h5>
 			<div class="form-row">
 				<div class="form-group col-md-6" id="dataInicialContainer">
 					<label for="dataInicial">Data Inicial:</label>
@@ -91,11 +90,11 @@
 
 
 			<!-- Modal de Mensagem -->
-			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
+			<div class="modal" id="modalMensagem" tabindex="-1" role="dialog" aria-labelledby="modalMensagemLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<div class="modal-header bg-danger text-white">
-							<h5 class="modal-title">Erro</h5>
+							<h5 class="modal-title" id="modalMensagemLabel">Erro</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -109,6 +108,7 @@
 					</div>
 				</div>
 			</div>
+			
 		</form>
 	</div>
 
@@ -140,11 +140,6 @@
 			$('#proximo').on('click', function() {
 				var tipoParquimetro = $('#tipoParquimetro').val();
 				window.location.href = 'index.html';
-				// if (tipoParquimetro === "fixo") {
-				// 	window.location.href = 'page5.html';
-				// } else {
-				// 	window.location.href = 'page4.html';
-				// }
 			});
 					
 			$("#tipoParquimetro").change(function(){
@@ -204,7 +199,6 @@
 			if (tipoParquimetro == 'fixo') {
 				url = 'http://localhost:8080/parquimetro/fixo';
 			
-				console.log('formatarData-$(dataInicial).val()',formatarData($('#dataInicial').val()))
 				var dataHoraInicial = formatarData($('#dataInicial').val()) + ' ' + $('#horaInicial').val() +':00';
 				var dataHoraFinal = formatarData($('#dataFinal').val()) + ' ' + $('#horaFinal').val()+':00';
 			
@@ -244,6 +238,7 @@
 					
 					if (response && response.id) {
 						localStorage.setItem('idParquimetro', response.id);
+						localStorage.setItem('existeParquimetro', "SIM");
 					}
 				},
 				error: function(error) {
