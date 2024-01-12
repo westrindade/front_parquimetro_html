@@ -27,19 +27,23 @@
 		
 			<h5>Parquimetro Aberto</h5>
 			<div class="form-row">
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
 					<label for="tipoParquimetro">Tipo Parquimetro:</label>
 					<input type="text" class="form-control form-control-lg" id="tipoParquimetro" name="tipoParquimetro">
 				</div>
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
 					<label for="veiculo">Veiculo:</label>
 					<input type="text" class="form-control form-control-lg" id="veiculo" name="veiculo">
 				</div>
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
 					<label for="condutor">Condutor:</label>
 					<input type="text" class="form-control form-control-lg" id="condutor" name="condutor">
 				</div>
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
+					<label for="valorTotal">Valor Total:</label>
+					<input type="text" class="form-control form-control-lg" id="valorTotal" name="valorTotal">
+				</div>
+				<div class="form-group col-md-2">
 					<label for="status">Status:</label>
 					<input type="text" class="form-control form-control-lg" id="status" name="status">
 				</div>
@@ -73,7 +77,11 @@
 			//botao
 			$('#proximo').on('click', function() {
 				var tipoParquimetro = $('#tipoParquimetro').val()
-				window.location.href = 'encerrarParquimetro.html';
+
+				if (tipoParquimetro == 'VARIAVEL')
+					window.location.href = 'encerrarParquimetro.html';
+				else
+					window.location.href = 'realizarPagamento.html';
 			});
 		
 		});
@@ -86,6 +94,7 @@
 			$('#condutor').val(cpf).prop('readonly', true);
 			$('#status').prop('readonly', true);
 			$('#tipoParquimetro').prop('readonly', true);
+			$('#valorTotal').prop('readonly', true);
 
 			enviarRequisicao();
 		}
@@ -123,6 +132,8 @@
 		function preencherTabelaECampos(lista) {
 			lista ? $('#status').val(lista.status) : null
 			$('#veiculo').val(lista.veiculo).prop('readonly', true);
+			$('#valorTotal').val(lista.valorTotal.toFixed(2)).prop('readonly', true);
+			
 			var periodos = lista.periodo ? lista.periodo : null
 			if (periodos){
 				var tabela = $('<table class="table table-bordered mt-3"></table>');
