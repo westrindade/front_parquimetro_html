@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+
+	<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script> -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script> -->
+	<script src="./js/script.js"></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./css/style.css">
 	<title>Parquimetro</title>
@@ -112,24 +122,16 @@
 		</form>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
-	<script src="./js/script.js"></script>
-
 	<script>
 
 		$(document).ready(function() {
 			//nickname
 			updateUserName();
-			
 			preencherCampos();
-			
+
 			//botao
 			$('#salvar').on('click', function() {
 				$('#cadastroForm').addClass('was-validated');
-				// Validar o formulário
 				if ($('#cadastroForm')[0].checkValidity())
 					enviarRequisicao();
 				else 
@@ -171,9 +173,9 @@
 					$("#horaFinal").attr('required', 'required');
 				}
 			});
-		
+
 		});
-		
+
 		function preencherCampos(){
 			var placa = localStorage.getItem('placa');
 			var cpf = localStorage.getItem('cpf');
@@ -195,13 +197,15 @@
 			
 			var url = ''
 			var dadosFormulario = {}
-			
+			let dataValida = true;
 			if (tipoParquimetro == 'fixo') {
 				url = 'http://localhost:8080/parquimetro/fixo';
 			
 				var dataHoraInicial = formatarData($('#dataInicial').val()) + ' ' + $('#horaInicial').val() +':00';
 				var dataHoraFinal = formatarData($('#dataFinal').val()) + ' ' + $('#horaFinal').val()+':00';
 			
+				dataValida = validarDataInicioFim(dataHoraInicial,dataHoraFinal)
+
 				dadosFormulario = {
 					veiculo: $("#veiculo").val(),
 					condutor: $("#condutor").val(),
@@ -225,29 +229,44 @@
 				};
 			}
 
-			// Envia a requisição
-			$.ajax({
-				type: "POST",
-				url: url,
-				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify(dadosFormulario),
-				success: function(response) {
-					console.log("Requisição bem-sucedida:", response);
-					exibirMensagem("Dados gravados com Sucesso",false);
-					exibeProximoBotao();
-					
-					if (response && response.id) {
-						localStorage.setItem('idParquimetro', response.id);
-						localStorage.setItem('existeParquimetro', "SIM");
+			console.log('dataValida',dataValida)
+
+			if (dataValida){
+				// Envia a requisição
+				$.ajax({
+					type: "POST",
+					url: url,
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(dadosFormulario),
+					success: function(response) {
+						console.log("Requisição bem-sucedida:", response);
+						exibirMensagem("Dados gravados com Sucesso",false);
+						exibeProximoBotao();
+						
+						if (response && response.id) {
+							localStorage.setItem('idParquimetro', response.id);
+							localStorage.setItem('existeParquimetro', "SIM");
+						}
+					},
+					error: function(error) {
+						console.error('Erro na requisição:', error);
+						exibirMensagem(error, true);
 					}
-				},
-				error: function(error) {
-					console.error('Erro na requisição:', error);
-					exibirMensagem(error, true);
-				}
-			});
+				});
+		
+			} else {
+				$('#cadastroForm').removeClass('was-validated');
+				exibirMensagem('Data Final Inválida', true);
+				$('#dataFinal').addClass('is-invalid');
+				$('#horaFinal').addClass('is-invalid');
+			}
 		}
 		
+		function validarDataInicioFim(dataInicial,dataFinal){
+			var dtHoraInicial = new Date(dataInicial);
+			var dtHoraFinal = new Date(dataFinal);
+			return dtHoraInicial <= dtHoraFinal
+		}
 	</script>
 
 </body>

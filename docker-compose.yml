@@ -1,0 +1,19 @@
+version: '3'
+services:
+  api-parking:
+    image: wesmax/api-parking
+    ports:
+      - "8080-8082:8080"
+  web-parking:
+    image: wesmax/web-parking
+    ports:
+      - "4200-4203:4200"
+  # web-parking-2:
+  #   image: wesmax/web-parking
+  #   ports:
+  #     - "4201:4201"
+#comando
+#docker-compose up
+
+#docker-compose up -d
+#docker-compose up --scale api-parking=2 --scale web-parking=3 -d
