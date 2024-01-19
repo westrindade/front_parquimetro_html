@@ -15,5 +15,5 @@ services:
 #comando
 #docker-compose up
 
-#docker-compose up -d
+#para rodar mais de uma para simular escalabilidade
 #docker-compose up --scale api-parking=2 --scale web-parking=3 -d
