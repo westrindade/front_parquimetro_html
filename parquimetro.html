@@ -229,8 +229,7 @@
 				};
 			}
 
-			console.log('dataValida',dataValida)
-
+			//console.log('dataValida',dataValida)
 			if (dataValida){
 				// Envia a requisição
 				$.ajax({
@@ -263,9 +262,31 @@
 		}
 		
 		function validarDataInicioFim(dataInicial,dataFinal){
-			var dtHoraInicial = new Date(dataInicial);
-			var dtHoraFinal = new Date(dataFinal);
+
+
+			var dtHoraInicial = returnDataFormatada(dataInicial);// new Date(dataInicial);
+			var dtHoraFinal = returnDataFormatada(dataFinal);//new Date(dataFinal);
 			return dtHoraInicial <= dtHoraFinal
+		}
+
+		function returnDataFormatada(data){
+			var partes = data.split(" ");
+			var dataPartes = partes[0].split("/");
+			var horaPartes = partes[1].split(":");
+
+			var dataFormatada = new Date(
+										parseInt(dataPartes[2], 10),
+										parseInt(dataPartes[1], 10),
+										parseInt(dataPartes[0], 10),
+										parseInt(horaPartes[0], 10),
+										parseInt(horaPartes[1], 10),
+										parseInt(horaPartes[2], 10)
+										);
+
+			//var ajusteFusoHorario = dataFormatada.getTimezoneOffset();
+			//console.log('ajusteFusoHorario',ajusteFusoHorario)
+    		//dataFormatada.setMinutes(dataFormatada.getMinutes() + ajusteFusoHorario);
+    		return dataFormatada
 		}
 	</script>
 
