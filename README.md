@@ -8,6 +8,7 @@ O objetivo é refazer uma solução de parquímetros, que atualmente apresenta a
 ## 🛠️ Tecnologias
 
 [![My Skills](https://skillicons.dev/icons?i=js,html,css,jquery,docker,docker-compose)](https://skillicons.dev)
+
 <!-- ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=flat&logo=jquery&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?style=flat&logo=docker&logoColor=white) -->
